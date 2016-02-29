@@ -10,6 +10,7 @@
  */
 
 namespace Ruler;
+use Ruler\Operator\BooleanValue;
 
 /**
  * Rule class.
@@ -47,24 +48,9 @@ class Rule implements Proposition
     {
         return $this->condition->evaluate($context);
     }
-
-    /**
-     * Execute the Rule with the given Context.
-     *
-     * The Rule will be evaluated, and if successful, will execute its
-     * $action callback.
-     *
-     * @param  Context         $context Context with which to execute this Rule
-     * @throws \LogicException
-     */
+    
     public function execute(Context $context)
     {
-        if ($this->evaluate($context) && isset($this->action)) {
-            if (!is_callable($this->action)) {
-                throw new \LogicException('Rule actions must be callable.');
-            }
-
-            call_user_func($this->action);
-        }
+        return new BooleanValue($this->evaluate($context));
     }
 }

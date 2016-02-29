@@ -116,6 +116,11 @@ class Value
         return $this->value > $value->getValue();
     }
 
+    public function inLastXDays(Value $value)
+    {
+        return strtotime($this->value) >= strtotime($value->getValue() . " days ago");
+    }
+
     /**
      * Less Than comparison.
      *

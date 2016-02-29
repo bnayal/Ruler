@@ -62,27 +62,34 @@ class RuleBuilder implements \ArrayAccess
     /**
      * Create a logical AND operator proposition.
      *
-     * @param Proposition $prop      Initial Proposition
-     * @param Proposition $prop2,... Optional unlimited number of additional Propositions
-     *
      * @return Operator\LogicalAnd
      */
-    public function logicalAnd(Proposition $prop, Proposition $prop2 = null)
+    public function logicalAnd(array $propositions)
     {
-        return new Operator\LogicalAnd(func_get_args());
+        $this->checkPropositions($propositions);
+
+        return new Operator\LogicalAnd($propositions);
     }
 
     /**
      * Create a logical OR operator proposition.
      *
-     * @param Proposition $prop      Initial Proposition
-     * @param Proposition $prop2,... Optional unlimited number of additional Propositions
-     *
      * @return Operator\LogicalOr
      */
-    public function logicalOr(Proposition $prop, Proposition $prop2 = null)
+    public function logicalOr(array $propositions)
     {
-        return new Operator\LogicalOr(func_get_args());
+        $this->checkPropositions($propositions);
+
+        return new Operator\LogicalOr($propositions);
+    }
+
+    private function checkPropositions(array $props)
+    {
+        foreach ($props as $prop) {
+            if (! $prop instanceof Proposition) {
+                throw new \LogicException('All parameters must be instances of Proposition interface!');
+            }
+        }
     }
 
     /**
@@ -92,9 +99,11 @@ class RuleBuilder implements \ArrayAccess
      *
      * @return Operator\LogicalNot
      */
-    public function logicalNot(Proposition $prop)
+    public function logicalNot(array $propositions)
     {
-        return new Operator\LogicalNot(array($prop));
+        $this->checkPropositions($propositions);
+
+        return new Operator\LogicalNot($propositions);
     }
 
     /**
@@ -105,9 +114,11 @@ class RuleBuilder implements \ArrayAccess
      *
      * @return Operator\LogicalXor
      */
-    public function logicalXor(Proposition $prop, Proposition $prop2 = null)
+    public function logicalXor(array $propositions)
     {
-        return new Operator\LogicalXor(func_get_args());
+        $this->checkPropositions($propositions);
+
+        return new Operator\LogicalXor($propositions);
     }
 
     /**
